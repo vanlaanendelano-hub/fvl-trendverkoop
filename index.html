@@ -165,13 +165,31 @@ function renderAdmin(){document.getElementById("adminList").innerHTML=products.m
 function changeStock(id,d){let p=products.find(x=>x.id===id);if(!p.unlimited)p.stock=Math.max(0,p.stock+d);save();render();renderAdmin()}
 function removeP(id){products=products.filter(p=>p.id!==id);save();render();renderAdmin()}
 function openBuy(id){selected=products.find(p=>p.id===id);buyTitle.textContent=selected.name;buyPrice.textContent="Totaal: "+selected.price;document.getElementById("checkout").classList.add("hidden");document.getElementById("buyModal").classList.remove("hidden")}
-function delivery(type){
-document.getElementById("checkout").classList.remove("hidden");
-let common=`<input id="buyerName" placeholder="Naam"><input id="buyerEmail" type="email" placeholder="E-mailadres">`;
-let fields=type==="pickup"?common:`${common}<input id="address" placeholder="Straat + huisnummer"><input id="zip" placeholder="Postcode"><input id="city" placeholder="Plaats"><input id="phone" placeholder="Telefoonnummer (optioneel)">`;
-if(type==="local") fields+=`<div class="info">🚚 Levering door ons: alleen Nijmegen, Wijchen en omgeving. Het adres wordt alleen meegestuurd met de bestelling.</div>`;
-if(type==="shipping") fields+=`<div class="info">📦 Verzendkosten worden in de echte betaalversie toegevoegd.</div>`;
-document.getElementById("fields").innerHTML=fields;
+function payDemo(){
+  const get = id => document.getElementById(id)?.value || "";
+
+  const data = {
+    name: get("buyerName"),
+    email: get("buyerEmail"),
+    product: document.getElementById("buyTitle")?.textContent || "",
+    amount: "1",
+    address: get("address"),
+    zip: get("zip"),
+    city: get("city"),
+    phone: get("phone")
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbylyFEhIbLp3BEMiIG784n7nSzTPFa8bIurZWtv9UBN9NqvpusDj66OQdVGuCTagxzEBA/exec", {
+    method: "POST",
+    mode: "no-cors",
+    headers: {
+      "Content-Type": "text/plain"
+    },
+    body: JSON.stringify(data)
+  });
+
+  alert("Bestelling verzonden! 🎉");
+  closeModal("buyModal");
 }
 function payDemo(){
   const data = {
