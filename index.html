@@ -65,34 +65,7 @@ footer{background:#030711;color:#8e98aa;border-top:1px solid #ffffff14}
 </main>
 <footer>© 2026 fvl.trendverkoop · Contact · Privacy · Voorwaarden</footer>
 
-<div id="staffModal" class="modal hidden"><div class="box"><button class="x" onclick="closeModal('staff
- 69
- 70
- 71
- 72
- 73
- 74
- 75
- 76
- 77
- 78
- 79
- 80
- 81
- 82
- 83
- 84
- 85
- 86
- 87
- 88
- 89
- 90
- 91
- 92
- 93
- 94
-Modal')">×</button><h2>Personeel</h2><p>Demo-login voor deze versie.</p><input id="pw" type="password" placeholder="Wachtwoord"><button class="primary" onclick="login()">Inloggen</button><div id="err"></div></div></div>
+<div id="staffModal" class="modal hidden"><div class="box"><button class="x" onclick="closeModal('staffModal')">×</button><h2>Personeel</h2><p>Demo-login voor deze versie.</p><input id="pw" type="password" placeholder="Wachtwoord"><button class="primary" onclick="login()">Inloggen</button><div id="err"></div></div></div>
 
 <div id="adminModal" class="modal hidden"><div class="box wide"><button class="x" onclick="closeModal('adminModal')">×</button><h2>Personeelsdashboard</h2>
 <div class="admin-tabs"><b>Producten</b><span>Bestellingen</span><span>Reviews</span></div>
@@ -165,47 +138,16 @@ function renderAdmin(){document.getElementById("adminList").innerHTML=products.m
 function changeStock(id,d){let p=products.find(x=>x.id===id);if(!p.unlimited)p.stock=Math.max(0,p.stock+d);save();render();renderAdmin()}
 function removeP(id){products=products.filter(p=>p.id!==id);save();render();renderAdmin()}
 function openBuy(id){selected=products.find(p=>p.id===id);buyTitle.textContent=selected.name;buyPrice.textContent="Totaal: "+selected.price;document.getElementById("checkout").classList.add("hidden");document.getElementById("buyModal").classList.remove("hidden")}
-function payDemo(){
-  const get = id => document.getElementById(id)?.value || "";
-
-  const data = {
-    name: get("buyerName"),
-    email: get("buyerEmail"),
-    product: document.getElementById("buyTitle")?.textContent || "",
-    amount: "1",
-    address: get("address"),
-    zip: get("zip"),
-    city: get("city"),
-    phone: get("phone")
-  };
-
-  fetch("https://script.google.com/macros/s/AKfycbylyFEhIbLp3BEMiIG784n7nSzTPFa8bIurZWtv9UBN9NqvpusDj66OQdVGuCTagxzEBA/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "text/plain"
-    },
-    body: JSON.stringify(data)
-  });
-
-  alert("Bestelling verzonden! 🎉");
-  closeModal("buyModal");
+function delivery(type){
+document.getElementById("checkout").classList.remove("hidden");
+let common=`<input id="buyerName" placeholder="Naam"><input id="buyerEmail" type="email" placeholder="E-mailadres">`;
+let fields=type==="pickup"?common:`${common}<input id="address" placeholder="Straat + huisnummer"><input id="zip" placeholder="Postcode"><input id="city" placeholder="Plaats"><input id="phone" placeholder="Telefoonnummer (optioneel)">`;
+if(type==="local") fields+=`<div class="info">🚚 Levering door ons: alleen Nijmegen, Wijchen en omgeving. Het adres wordt alleen meegestuurd met de bestelling.</div>`;
+if(type==="shipping") fields+=`<div class="info">📦 Verzendkosten worden in de echte betaalversie toegevoegd.</div>`;
+document.getElementById("fields").innerHTML=fields;
 }
 function payDemo(){
-  alert("Dit is nog de demo. De echte betaalpagina, verkoopmail, bevestigingsmail en unieke digitale link worden server-side gekoppeld. Er wordt in deze demo niets naar een betaalprovider gestuurd.");
-}
-
-  fetch("https://script.google.com/macros/s/AKfycbylyFEhIbLp3BEMiIG784n7nSzTPFa8bIurZWtv9UBN9NqvpusDj66OQdVGuCTagxzEBA/exec", {
-    method: "POST",
-    mode: "no-cors",
-    headers: {
-      "Content-Type": "text/plain"
-    },
-    body: JSON.stringify(data)
-  });
-
-  alert("Bestelling verzonden! 🎉");
-  closeModal("buyModal");
+alert("Dit is nog de demo. De echte betaalpagina, verkoopmail, bevestigingsmail en unieke digitale link worden server-side gekoppeld. Er wordt in deze demo niets naar een betaalprovider gestuurd.");
 }
 render();
 // V4 repair page + editable repair price list (prototype/local demo)
