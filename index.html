@@ -104,8 +104,35 @@ function openStaff(){document.getElementById("staffModal").classList.remove("hid
 function closeModal(id){document.getElementById(id).classList.add("hidden")}
 function login(){if(document.getElementById("pw").value==="FVL2026"){closeModal("staffModal");document.getElementById("adminModal").classList.remove("hidden");renderAdmin()}else document.getElementById("err").textContent="Onjuist wachtwoord."}
 function addProduct(){
-let p={id:Date.now(),name:name.value.trim(),price:price.value.trim(),stock:Math.max(0,Number(stock.value)||0),unlimited:unlimited.checked,category:category.value.trim()||"Trend",image:image.value.trim(),desc:desc.value.trim(),specs:specs.value.trim(),rating:0,reviews:0};
-if(!p.name||!p.price){alert("Vul naam en prijs in.");return}products.push(p);save();render();renderAdmin();["name","price","stock","category","image","desc","specs"].forEach(id=>document.getElementById(id).value="");unlimited.checked=false;
+  const p = {
+    id: Date.now(),
+    name: document.getElementById("name").value.trim(),
+    price: document.getElementById("price").value.trim(),
+    stock: Math.max(0, Number(document.getElementById("stock").value) || 0),
+    unlimited: document.getElementById("unlimited").checked,
+    category: document.getElementById("category").value.trim() || "Trend",
+    image: document.getElementById("image").value.trim(),
+    desc: document.getElementById("desc").value.trim(),
+    specs: document.getElementById("specs").value.trim(),
+    rating: 0,
+    reviews: 0
+  };
+
+  if (!p.name || !p.price) {
+    alert("Vul naam en prijs in.");
+    return;
+  }
+
+  products.push(p);
+  save();
+  render();
+  renderAdmin();
+
+  ["name","price","stock","category","image","desc","specs"].forEach(id => {
+    document.getElementById(id).value = "";
+  });
+
+  document.getElementById("unlimited").checked = false;
 }
 function renderAdmin(){document.getElementById("adminList").innerHTML=products.map(p=>`<div class="admin-row"><span><b>${esc(p.name)}</b><br>${p.unlimited?"♾️":p.stock+" stuks"}</span><span><button onclick="changeStock(${p.id},-1)">−</button> <button onclick="changeStock(${p.id},1)">+</button> <button onclick="removeP(${p.id})">Verwijder</button></span></div>`).join("")}
 function changeStock(id,d){let p=products.find(x=>x.id===id);if(!p.unlimited)p.stock=Math.max(0,p.stock+d);save();render();renderAdmin()}
