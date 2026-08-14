@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "fvl-trendverkoop-official",
+  "main": "worker.js",
+  "compatibility_date": "2026-08-14",
+  "assets": {
+    "directory": "."
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "fvl-trendverkoop-db",
+      "database_id": "d7484e94-0316-4a0f-bd12-867db7450613"
+    }
+  ]
+}
