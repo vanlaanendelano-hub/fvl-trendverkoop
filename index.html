@@ -87,7 +87,21 @@ footer{background:#030711;color:#8e98aa;border-top:1px solid #ffffff14}
 <div id="checkout" class="hidden"><div id="fields"></div><button class="primary" onclick="payDemo()">Naar betalen →</button></div>
 </div></div>
 
-<script>let products=JSON.parse(localStorage.getItem("fvl_v2")||"null")||[];
+<script>
+let products = [];
+
+async function loadProducts() {
+  try {
+    const res = await fetch("/api/products");
+    if (!res.ok) throw new Error("Database niet bereikbaar");
+    products = await res.json();
+    render();
+  } catch (e) {
+    console.error("Database fout:", e);
+  }
+}
+
+loadProducts();
 let selected=null;
 const save=()=>localStorage.setItem("fvl_v2",JSON.stringify(products));
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
